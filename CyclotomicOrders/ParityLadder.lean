@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 Dillon Ryan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Dillon Ryan
+-/
 import Mathlib
 
 /-!
@@ -130,7 +135,7 @@ lemma ladder_reflect {r m : ℕ} (hr : ¬ (p - 1) ∣ r) (hm : m ≤ p - 1) :
       omega
     · intro k hk
       simp only [mem_Ioc] at hk
-      show (((k : ZMod p))⁻¹) ^ r
+      change (((k : ZMod p))⁻¹) ^ r
           = (-1 : ZMod p) ^ r * ((((p - k : ℕ) : ZMod p))⁻¹) ^ r
       have hcast : ((k : ZMod p)) = -(((p - k : ℕ) : ZMod p)) := by
         rw [Nat.cast_sub (show k ≤ p by omega)]

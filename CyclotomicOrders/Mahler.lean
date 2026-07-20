@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 Dillon Ryan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Dillon Ryan
+-/
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Algebra.Polynomial.Roots
 import Mathlib.Tactic.IntervalCases
@@ -25,14 +30,16 @@ namespace CyclotomicOrders.Mahler
 
 /-! ### List-matrix kernel layer (plain ℤ lists so `decide` reduces structurally). -/
 
+/-- A matrix as a plain list of rows over ℤ (structural, so `decide` reduces it). -/
 abbrev Mat := List (List ℤ)
 
+/-- The rank of E10: all list-matrices below are 10×10. -/
 def dim : Nat := 10
 
-set_option maxRecDepth 100000 in
 /-- The T(2,3,7) tree: center 0; arms 0–1 (length 1), 0–2–3 (length 2), 0–4–…–9 (length 6). -/
 def edges : List (Nat × Nat) := [(0,1),(0,2),(2,3),(0,4),(4,5),(5,6),(6,7),(7,8),(8,9)]
 
+/-- Adjacency in the T(2,3,7) tree (symmetrized edge membership). -/
 def adj (i j : Nat) : Bool := edges.contains (i, j) || edges.contains (j, i)
 
 /-- The E10 Cartan matrix, generated from the tree (2 on the diagonal, −1 on edges). -/
@@ -41,22 +48,28 @@ def cartan : Mat :=
     (List.range dim).map fun j =>
       if i = j then 2 else if adj i j then -1 else 0
 
+/-- Entry `M i j` of a list-matrix, defaulting to 0 out of range. -/
 def entry (M : Mat) (i j : Nat) : ℤ := ((M.getD i []).getD j 0)
 
+/-- The 10×10 identity list-matrix. -/
 def idMat : Mat :=
   (List.range dim).map fun i => (List.range dim).map fun j => if i = j then (1 : ℤ) else 0
 
+/-- The 10×10 zero list-matrix. -/
 def zeroMat : Mat :=
   (List.range dim).map fun _ => (List.range dim).map fun _ => (0 : ℤ)
 
+/-- List-matrix product (structural, so `decide` reduces it). -/
 def mul (A B : Mat) : Mat :=
   (List.range dim).map fun i =>
     (List.range dim).map fun j =>
       ((List.range dim).map fun k => entry A i k * entry B k j).foldl (· + ·) 0
 
+/-- List-matrix transpose. -/
 def transpose (M : Mat) : Mat :=
   (List.range dim).map fun i => (List.range dim).map fun j => entry M j i
 
+/-- List-matrix trace. -/
 def trace (M : Mat) : ℤ := ((List.range dim).map fun i => entry M i i).foldl (· + ·) 0
 
 /-- Simple reflection s_i on root coordinates: row i of the identity becomes eᵢ − (Cartan row i). -/
@@ -95,24 +108,26 @@ def bareissAux : Nat → ℤ → Mat → ℤ
         (p.tail.zip r.tail).map fun q => (p0 * q.2 - r.getD 0 0 * q.1) / prev
       bareissAux f p0 reduced
 
+/-- Determinant by Bareiss fraction-free elimination (exact over ℤ). -/
 def det (M : Mat) : ℤ := bareissAux M.length 1 M
 
+/-- The leading k×k block of a list-matrix. -/
 def leading (M : Mat) (k : Nat) : Mat := (M.take k).map (·.take k)
 
 /-- The finite-type-leading-block certification order (long arm far→near, center, short arms). -/
 def certPerm : List Nat := [9, 8, 7, 6, 5, 4, 0, 1, 2, 3]
 
+/-- The E10 Cartan matrix in certification order (conjugate by `certPerm`). -/
 def cartanCert : Mat := certPerm.map fun i => certPerm.map fun j => entry cartan i j
 
 /-! ### The kernel facts (all `decide`, no axioms). -/
 
 /-- The generated Cartan matrix is symmetric. -/
-theorem cartan_symmetric : transpose cartan = cartan := by decide
+theorem cartan_symmetric : transpose cartan = cartan := by decide +kernel
 
-set_option maxRecDepth 100000 in
 /-- **Reciprocity witness**: Lehmer's coefficient vector is its own reversal — the
     algebraic functional equation (roots closed under z ↔ 1/z). -/
-theorem lehmer_palindrome : lehmer.reverse = lehmer := by decide
+theorem lehmer_palindrome : lehmer.reverse = lehmer := by decide +kernel
 
 /-- The Coxeter element, evaluated (the reduction is split so each `decide` stays
     shallow: product chain in `coxeter_eq_lit`, Horner chain on the literal). -/
@@ -128,13 +143,11 @@ def coxeterLit : Mat :=
    [-1, 1, 1, 0, 0, 0, 0, 0, 0, 1],
    [-1, 1, 1, 0, 0, 0, 0, 0, 0, 0]]
 
-set_option maxRecDepth 100000 in
 /-- The reflection product evaluates to the literal. -/
-theorem coxeter_eq_lit : coxeter = coxeterLit := by decide
+theorem coxeter_eq_lit : coxeter = coxeterLit := by decide +kernel
 
-set_option maxRecDepth 100000 in
 /-- Horner evaluation of L at the literal is the zero matrix. -/
-theorem lehmer_annihilates_lit : polyEvalMat lehmer coxeterLit = zeroMat := by decide
+theorem lehmer_annihilates_lit : polyEvalMat lehmer coxeterLit = zeroMat := by decide +kernel
 
 /-- **THE ANNIHILATION WITNESS**: Lehmer's polynomial annihilates the E10 Coxeter
     element — L(coxeter) = 0 exactly.  With `coxeter_trace` and `coxeter_det` this is
@@ -142,29 +155,25 @@ theorem lehmer_annihilates_lit : polyEvalMat lehmer coxeterLit = zeroMat := by d
 theorem lehmer_annihilates : polyEvalMat lehmer coxeter = zeroMat :=
   coxeter_eq_lit ▸ lehmer_annihilates_lit
 
-set_option maxRecDepth 100000 in
 /-- tr(coxeter) = −1 = −(coefficient of x⁹ in L). -/
-theorem coxeter_trace : trace coxeter = -1 := by decide
+theorem coxeter_trace : trace coxeter = -1 := by decide +kernel
 
-set_option maxRecDepth 100000 in
 /-- det(coxeter) = 1 = (−1)¹⁰ · (constant term of L): the Coxeter element is a
     reciprocal (Salem-type) isometry. -/
-theorem coxeter_det : det coxeter = 1 := by decide
+theorem coxeter_det : det coxeter = 1 := by decide +kernel
 
-set_option maxRecDepth 100000 in
 /-- **THE E8/E9/E10 CROSSING, IN INTEGERS**: the natural-order Jacobi leading minors of
     the E10 Cartan matrix.  The final entries 1, 0, −1 at k = 8, 9, 10 is det(E8), det(E9),
     det(E10): finite type → affine (determinant 0) → indefinite (Lorentzian). -/
 theorem minors_natural :
     (List.range dim).map (fun k => det (leading cartan (k + 1))) =
-      [2, 3, 4, 5, 4, 3, 2, 1, 0, -1] := by decide
+      [2, 3, 4, 5, 4, 3, 2, 1, 0, -1] := by decide +kernel
 
-set_option maxRecDepth 100000 in
 /-- Jacobi certification minors (all proper leading blocks finite type, so all nonzero):
     9 positive then −1 ⇒ the Cartan form has Lorentzian signature (+9, −1). -/
 theorem minors_certification :
     (List.range dim).map (fun k => det (leading cartanCert (k + 1))) =
-      [2, 3, 4, 5, 6, 7, 8, 9, 4, -1] := by decide
+      [2, 3, 4, 5, 6, 7, 8, 9, 4, -1] := by decide +kernel
 
 /-! ### The FULL characteristic polynomial.
 
@@ -189,12 +198,12 @@ def flAux (C : Mat) : Nat → Nat → List ℤ → Mat → List ℤ
       let M' := addDiag (mul C M) (cs.headD 1)
       flAux C f (k + 1) ((-(trace (mul C M')) / (k : ℤ)) :: cs) M'
 
+/-- Characteristic-polynomial coefficients by Faddeev–LeVerrier (leading 1 first). -/
 def flCharpoly (C : Mat) : List ℤ := flAux C dim 1 [1] zeroMat
 
-set_option maxRecDepth 400000 in
 /-- **THE FULL COEFFICIENT VECTOR**: Faddeev–LeVerrier on the E10 Coxeter element
     computes Lehmer's polynomial, coefficient by coefficient. -/
-theorem fl_charpoly_lehmer : flCharpoly coxeterLit = lehmer := by decide
+theorem fl_charpoly_lehmer : flCharpoly coxeterLit = lehmer := by decide +kernel
 
 /-- On the reflection-product form. -/
 theorem fl_charpoly_coxeter : flCharpoly coxeter = lehmer :=
@@ -205,12 +214,12 @@ def powAux (C : Mat) : Nat → Mat → List ℤ
   | 0,     _ => []
   | f + 1, P => trace P :: powAux C f (mul P C)
 
+/-- The trace power sums `tr(C), tr(C²), …, tr(C¹⁰)`. -/
 def powerSums (C : Mat) : List ℤ := powAux C dim C
 
-set_option maxRecDepth 400000 in
 /-- The E10 Coxeter trace power sums. -/
 theorem power_sums_value : powerSums coxeterLit = [-1, 1, 2, 1, 4, 4, 6, 1, 2, 6] := by
-  decide
+  decide +kernel
 
 /-- The trace power sums as a table (values decided in `power_sums_value`). -/
 def pTable : Nat → ℤ

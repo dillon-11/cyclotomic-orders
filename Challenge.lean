@@ -1,4 +1,9 @@
 /-
+Copyright (c) 2026 Dillon Ryan. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Dillon Ryan
+-/
+/-
   Challenge: cyclotomic values at integer bases — three headline theorems,
   stated Mathlib-only.
 
