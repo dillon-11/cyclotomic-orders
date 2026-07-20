@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
 title: "Cyclotomic values at integer bases, in Lean 4"
 authors:
-  - family-names: Clarkson
-    given-names: Michael Ryan
+  - family-names: Ryan
+    given-names: Dillon
 type: software
 license: Apache-2.0
 date-released: "2026-07-19"
