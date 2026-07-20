@@ -1,0 +1,122 @@
+version: "v0.3"
+
+project:
+  name: "cyclotomic-orders"
+  authors: ["Michael Ryan Clarkson"]
+  license: "Apache-2.0"
+
+sources:
+  - title: "Theoremata circa divisores numerorum"
+    authors: ["L. Euler"]
+    id: "Novi Commentarii academiae scientiarum Petropolitanae 1 (1750)"
+    type: "paper — the classical Mersenne-factor congruence this repository re-proves in Lean"
+    author_contacted: "n/a"
+  - title: "Zum letzten Fermatschen Theorem"
+    authors: ["A. Wieferich"]
+    id: "https://doi.org/10.1515/crll.1909.136.293"
+    type: "paper (J. reine angew. Math. 136, 1909) — the depth-2 condition whose general form is the order-lift dichotomy's non-lift branch"
+    author_contacted: "n/a"
+  - title: "The numerical factors of the arithmetic forms prod(1 ± alpha_i^n)"
+    authors: ["T. A. Pierce"]
+    id: "https://doi.org/10.2307/1967664"
+    type: "paper (Annals of Mathematics 18, 1916) — the Pierce sequence bounded in PierceSequence.lean"
+    author_contacted: "n/a"
+  - title: "Factorization of certain cyclotomic functions"
+    authors: ["D. H. Lehmer"]
+    id: "https://doi.org/10.2307/1968172"
+    type: "paper (Annals of Mathematics 34, 1933)"
+    author_contacted: "n/a"
+  - title: "Cyclotomic polynomials"
+    authors: ["Mathlib contributors"]
+    id: "Mathlib.RingTheory.Polynomial.Cyclotomic"
+    type: "library (Mathlib; carries the Fermat-number congruence but not the Mersenne analogue proved here)"
+    author_contacted: "no"
+
+status:
+  scope: >
+    The classical prime families unified as cyclotomic values at integer
+    bases: Mersenne numbers are Phi_p(2) at prime index, Fermat numbers are
+    Phi_{2^(k+1)}(2), repunits the base-10 row.  Proved here: the master
+    order theorem (a prime q dividing Phi_n(a) with q coprime to n has a of
+    multiplicative order exactly n mod q, hence q = 1 mod n); the Mersenne
+    congruence (every prime factor of 2^p - 1, p an odd prime, is 1 mod 2p —
+    the analogue of Mathlib's Fermat-number congruence, not currently in
+    Mathlib); the order-lift dichotomy ord_{q^2}(a) in {ord_q(a), q ord_q(a)}
+    whose non-lift branch is the Wieferich condition; the base congruences
+    instantiated for the Mersenne and repunit rows; the Pierce-sequence window
+    (log prod |rho^n - 1| pinned around n log M(p)); and, as the frame the
+    sequence sits over, kernel-decided facts about Lehmer's polynomial as the
+    E10 Coxeter characteristic polynomial with Lehmer's problem as a defined
+    (never assumed) Prop.  No search results, tallies, or completeness
+    statements live here: this is the lemma layer under the Wieferich
+    censuses.
+  sorry_count: 9
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "cyclotomic_primeFactor_orderOf"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/MasterOrder.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "mersenne_primeFactor_two_mul"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/MersenneCongruence.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "orderOf_lift_dichotomy"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/Wieferich.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "sq_dvd_mersenne_wieferich"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/MersenneSquare.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "sq_dvd_two_pow_forced"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/MersenneSquare.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "no_wallSunSun_below_100"
+      file: "CyclotomicOrders/WallSunSun.lean (root-level, kernel-decided)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "parity_tower_law"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/ParityLadder.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "golden_band_bernoulli"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/ParityLadder.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+    - declaration: "silver_band_bernoulli"
+      file: "CyclotomicOrders.lean (proof in CyclotomicOrders/ParityLadder.lean)"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "config.json"
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-fable-5", "claude-opus-4-7"]
+      framework: "Claude Code + the author's research engine (\"ail\")"
+      tool_setup: >
+        Three contributors: the human author (direction, judgment, review);
+        Claude models via Claude Code (reasoning, implementation, Lean
+        formalization); and the author's research harness ("ail") enforcing
+        preregistration, control-first experiments, guard-checked kernels,
+        and independent re-computation.

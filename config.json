@@ -1,0 +1,21 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "CyclotomicOrders",
+  "theorem_names": [
+    "cyclotomic_primeFactor_orderOf",
+    "mersenne_primeFactor_two_mul",
+    "orderOf_lift_dichotomy",
+    "sq_dvd_mersenne_wieferich",
+    "sq_dvd_two_pow_forced",
+    "no_wallSunSun_below_100",
+    "parity_tower_law",
+    "golden_band_bernoulli",
+    "silver_band_bernoulli"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

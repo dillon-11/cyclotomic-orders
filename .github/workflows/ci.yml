@@ -1,0 +1,65 @@
+name: build + comparator
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan / Lean toolchain
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Go (for landrun)
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - name: Build landrun
+        run: |
+          git clone https://github.com/Zouuup/landrun /tmp/landrun
+          cd /tmp/landrun
+          go build -o landrun cmd/landrun/main.go
+          sudo install -m 0755 landrun /usr/local/bin/landrun
+
+      - name: Build lean4export (pinned to this repo's toolchain)
+        run: |
+          git clone https://github.com/leanprover/lean4export /tmp/lean4export
+          cd /tmp/lean4export
+          cp "$GITHUB_WORKSPACE/lean-toolchain" lean-toolchain
+          lake build
+          sudo install -m 0755 .lake/build/bin/lean4export /usr/local/bin/lean4export
+
+      - name: Build comparator (pinned to this repo's toolchain)
+        run: |
+          git clone https://github.com/leanprover/comparator /tmp/comparator
+          cd /tmp/comparator
+          cp "$GITHUB_WORKSPACE/lean-toolchain" lean-toolchain
+          lake build comparator
+          echo "COMPARATOR_BIN=$(pwd)/.lake/build/bin/comparator" >> "$GITHUB_ENV"
+
+      - name: Fetch Mathlib cache
+        run: lake exe cache get
+
+      - name: Build (lake build)
+        run: lake build
+
+      # landrun provides the real kernel-level sandbox here. comparator's README
+      # additionally recommends wrapping this in
+      # `systemd-run --property=RestrictAddressFamilies=~AF_UNIX` to guard a known
+      # landrun AF_UNIX escape pending a Linux fix; GitHub-hosted runners' ephemeral
+      # --user systemd session makes that wrapper unreliable in CI, so it is
+      # deliberately omitted here — this job is a build/regression check, not the trust
+      # boundary for the claim (that trust boundary is a local run per README, using the
+      # full systemd-run invocation).
+      - name: Run comparator
+        run: lake env "$COMPARATOR_BIN" config.json
+
