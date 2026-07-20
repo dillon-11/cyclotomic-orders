@@ -3,7 +3,15 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 import CyclotomicOrders.BaseTwo
 
 /-!
@@ -24,7 +32,7 @@ primitive prime divisor of Φ_d(2) is ≡ 1 (mod d) — instantiated at the two 
 families (prime index for Mersenne, power-of-two index for Fermat).  It explains
 the factorizations 2¹¹ − 1 = 23·89 (23 = 2·11+1, 89 = 8·11+1) and
 2²³ − 1 = 47·178481.
-Axiom-clean, `sorry`-free.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 namespace CyclotomicOrders

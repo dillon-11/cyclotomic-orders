@@ -14,7 +14,7 @@ the gap question while hunting primes in the sequences Δ_n = ∏_ρ (ρⁿ − 
   • Mersenne numbers ARE the Pierce sequence of x − 2:  Δ_n(x−2) = 2ⁿ − 1  (proven below);
     Fermat numbers are its 2-adic tower quotients Φ_{2^{k+1}}(2) — the 2-power tower
     rungs.
-WHAT IS PROVEN (axiom-clean, sorry-free):
+WHAT IS PROVEN (axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only):
   • `pierce_lower`   — 1 ≤ Δ_n(p) for monic p with no n-th root of unity among its
                        roots (the integrality jaw, consumed verbatim from the
                        cyclotomic repulsion module);

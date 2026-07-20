@@ -3,7 +3,16 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.NumberTheory.Fermat
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 import CyclotomicOrders.PierceSequence
 
 /-!
@@ -25,7 +34,7 @@ the prime Φ_{2^(k+1)}(2) at power-of-two index — the two extreme index types 
 same base-2 cyclotomic family.  This is why Mersenne primality forces a prime
 exponent (Mathlib's `Nat.prime_of_pow_sub_one_prime`): for composite n a proper
 Φ_d(2) > 1 splits off the product.
-Axiom-clean, `sorry`-free.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 namespace CyclotomicOrders.BaseTwo

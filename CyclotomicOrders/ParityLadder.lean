@@ -3,7 +3,15 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 /-!
 # the parity-tower law over ZMod p, structural + analytic halves.

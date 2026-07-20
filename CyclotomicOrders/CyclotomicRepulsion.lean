@@ -3,7 +3,18 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.RingTheory.Polynomial.Resultant.Basic
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
+import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 /-!
 # THE CYCLOTOMIC REPULSION FLOOR
@@ -23,7 +34,7 @@ Assembly:
   §1  dev + the arc bound  ‖e^{2πiu} − 1‖ ≤ 2π · dev u   (cos quadratic bound)
   §2  the integrality engine: Res over ℤ, mapped to ℂ (Mathlib resultant API)
   §3  THE FLOOR for Salem-shaped root multisets + the ε-mimicry corollary
-No `sorry`, no `axiom`.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 open Polynomial Complex Real

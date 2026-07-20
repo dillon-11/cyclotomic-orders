@@ -3,7 +3,15 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 /-!
 # the general primitive-prime order theorem
@@ -17,7 +25,7 @@ power-of-two indices).
     (a root of `Φ_n` in a field of characteristic coprime to `n` is a primitive
     `n`-th root, `isRoot_cyclotomic_iff`);
   • `cyclotomic_primeFactor_dvd_sub_one` — hence `n ∣ q − 1`.
-Axiom-clean, `sorry`-free.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 namespace CyclotomicOrders

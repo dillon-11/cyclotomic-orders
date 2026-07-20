@@ -23,7 +23,7 @@ polynomial of the E10 Coxeter element, together with the Mahler-measure framewor
   • `LehmerProblem` — Lehmer's problem as a *defined* Prop (never axiomatized), and
     `gap_floor_of_lehmer`: it implies a uniform positive log-Mahler floor;
   • `log_gap_pos_iff_dilatation_gt_one` — `0 < log λ ↔ 1 < λ`.
-All proofs foundational ([propext, Classical.choice, Quot.sound]), no `sorry`.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 namespace CyclotomicOrders.Mahler

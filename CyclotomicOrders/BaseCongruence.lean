@@ -3,7 +3,15 @@ Copyright (c) 2026 Dillon Ryan. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Dillon Ryan
 -/
-import Mathlib
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.GroupTheory.OrderOfElement
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Roots
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Linarith
 
 /-!
 # the primitive-prime congruence at an arbitrary base
@@ -18,7 +26,7 @@ repunit primes Rₚ = (10ᵖ − 1)/9.
     ≡ 1 (mod p) (a − 1 = 1 is never divisible by a prime);
   • `repunit_primeFactor` — base 10: a prime factor q ≠ 3 of the repunit
     Rₚ · 9 = 10ᵖ − 1 is ≡ 1 (mod p).
-Axiom-clean, `sorry`-free.
+Axiom footprint: `propext`, `Classical.choice`, `Quot.sound` only.
 -/
 
 namespace CyclotomicOrders.Base
